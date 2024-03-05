@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import '../company/page_Container.dart';
+import '../secure_share_state.dart';
 import '../shared_state.dart';
+import '../url/loginaction.dart';
 import '../user/user.dart';
-import '../util/pair.dart';
 import '../util/show_snackbar.dart';
 
 Form _loginForm(BuildContext context, Map<String, String>? userInfo) {
-  var usernameController = TextEditingController();
+  var emailController = TextEditingController();
   var passwordController = TextEditingController();
 
   if (userInfo != null) {
-    usernameController.text = userInfo['username'] ?? '';
+    emailController.text = userInfo['username'] ?? '';
     passwordController.text = userInfo['password'] ?? '';
   }
 
@@ -21,7 +21,7 @@ Form _loginForm(BuildContext context, Map<String, String>? userInfo) {
       children: <Widget>[
         TextFormField(
           style: const TextStyle(color: Colors.white),
-          controller: usernameController,
+          controller: emailController,
         ),
         const SizedBox(height: 16.0),
         TextFormField(
@@ -30,27 +30,25 @@ Form _loginForm(BuildContext context, Map<String, String>? userInfo) {
           controller: passwordController,
         ),
         const SizedBox(height: 16.0),
-        standardizedButton('Log ind', () async {
-          Pair<bool, Pair<String, int>> result = await bearerTokenFromUserLogin(
-            usernameController.text,
-            passwordController.text,
-          );
-          if (result.first) {
-            SharedState.setBearerToken(result.second.first);
-            SharedState.setUserId(result.second.second);
-            SecureSharedState.setUsername(usernameController.text);
-            SecureSharedState.setPassword(passwordController.text);
-            usernameController.text = '';
-            passwordController.text = '';
+        ElevatedButton(
+          onPressed: () async {
 
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => pageContainer(const User())));
-          } else {
-            showSnackbar(context, 'Brugernavn eller adgangskode er forkert.');
-          }
-        }),
+            var result = await logincall(emailController.text, passwordController.text);
+            if (result != null) {
+              SharedState.setBearerToken(result.token);
+              SecureSharedState.setUsername(emailController.text);
+              SecureSharedState.setPassword(passwordController.text);
+              emailController.text = '';
+              passwordController.text = '';
+
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const User()));
+            } else {
+              showSnackbar(context, 'Brugernavn eller adgangskode er forkert.');
+            }
+          },
+          child: const Text('Enabled'),
+        )
       ],
     ),
   );
@@ -64,9 +62,9 @@ class Login extends StatelessWidget {
     return FutureBuilder<Map<String, String>>(
       future: SecureSharedState.readAll(),
       builder: (
-          BuildContext context,
-          AsyncSnapshot<Map<String, String>> snapshot,
-          ) {
+        BuildContext context,
+        AsyncSnapshot<Map<String, String>> snapshot,
+      ) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
             return const Text('Henter gemt login...');
@@ -76,7 +74,6 @@ class Login extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  pageTitle('LOGIN'),
                   const SizedBox(height: 32.0),
                   _loginForm(context, snapshot.data),
                 ],

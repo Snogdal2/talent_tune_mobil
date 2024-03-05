@@ -7,18 +7,13 @@ Scaffold pageContainer(Widget child) {
   return Scaffold(
     body: DefaultTextStyle(
       style: const TextStyle(
-        color: Colors.white,
+        color: Colors.black,
         fontSize: 16.0,
         fontWeight: FontWeight.bold,
+        backgroundColor: Colors.black
       ),
       child: Container(
         alignment: Alignment.center,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/background.jpg'),
-            fit: BoxFit.cover,
-          ),
-        ),
         child: SingleChildScrollView(
           child: child,
         ),
@@ -26,4 +21,3 @@ Scaffold pageContainer(Widget child) {
     ),
   );
 }
-

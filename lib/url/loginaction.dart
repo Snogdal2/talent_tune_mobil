@@ -1,22 +1,26 @@
+import 'package:http/http.dart' as http;
 import 'dart:convert';
-import '../util/pair.dart';
-import 'url_helper.dart';
+import 'package:talent_tune_mobil/model/login_model.dart';
 
+Future<logininfo> logincall(String email, String password) async {
+  final response = await http.post(
+    Uri.parse('http://localhost:3001/auth/token'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'email': email,
+      'password': password
+    }),
+  );
 
-Future<Pair<bool, Pair<String, int>>> bearerTokenFromUserLogin(
-    String username, String password) async {
-  var url = uriHelper('/login');
-  var response =
-  await post(url, body: {'username': username, 'password': password});
-
-  var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
   if (response.statusCode == 200) {
-    String token = decodedResponse['Bearer'];
-
-    Map<String, dynamic> payload = Jwt.parseJwt(token);
-
-    return Pair(true, Pair(token, payload['userId']));
+    // If the server did return a 201 CREATED response,
+    // then parse the JSON.
+    return logininfo.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+  } else {
+    // If the server did not return a 201 CREATED response,
+    // then throw an exception.
+    throw Exception('Failed to create album.');
   }
-
-  return const Pair(false, Pair('', 0));
 }

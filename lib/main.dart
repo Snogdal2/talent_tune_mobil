@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'company/page_Container.dart';
-import 'login/login.dart';
+import 'register.dart';
 import 'secure_share_state.dart';
 import 'shared_state.dart';
 import 'url/loginaction.dart';
@@ -12,28 +11,20 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
       home: MyHomePage(title: 'Flutter Demo Home Page'),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -42,11 +33,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // TRY THIS: Try changing the color here to a specific color (to
         // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
         // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
@@ -84,7 +72,6 @@ class _MyHomePageState extends State<MyHomePage> {
             const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () async {
-
                 var result = await logincall(emailController.text, passwordController.text);
                 if (result != null) {
                   SharedState.setBearerToken(result.token);
@@ -93,13 +80,19 @@ class _MyHomePageState extends State<MyHomePage> {
                   emailController.text = '';
                   passwordController.text = '';
 
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const User()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const User()));
                 } else {
                   showSnackbar(context, 'Brugernavn eller adgangskode er forkert.');
                 }
               },
-              child: const Text('Enabled'),
+              child: const Text('Login'),
+            ),
+            const SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: () async {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterPage()));
+              },
+              child: const Text('Register'),
             )
           ],
         ),
@@ -107,4 +100,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-

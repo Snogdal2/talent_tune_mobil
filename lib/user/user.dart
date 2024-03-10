@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
+import 'dashboard.dart';
+import 'joblisting.dart';
+import 'profile.dart';
+
 class User extends StatefulWidget {
-  const User({Key? key}) : super(key: key);
+  const User({super.key});
 
   @override
   _UserState createState() => _UserState();
@@ -10,17 +14,16 @@ class User extends StatefulWidget {
 class _UserState extends State<User> {
   int _currentPageIndex = 0;
 
-  List<Widget> _pages = [
-    Page1(),
-    Page2(),
-    Page3(),
+  final List<Widget> _pages = [
+    const ChatPage(),
+    const JobListingPage(),
+    const ProfilePage(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home Page'),
         actions: [
           PopupMenuButton<int>(
             onSelected: (int index) {
@@ -29,17 +32,17 @@ class _UserState extends State<User> {
               });
             },
             itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
-              PopupMenuItem<int>(
+              const PopupMenuItem<int>(
                 value: 0,
-                child: Text('Page 1'),
+                child: Text('Ai page'),
               ),
-              PopupMenuItem<int>(
+              const PopupMenuItem<int>(
                 value: 1,
-                child: Text('Page 2'),
+                child: Text('Job Listing Page'),
               ),
-              PopupMenuItem<int>(
+              const PopupMenuItem<int>(
                 value: 2,
-                child: Text('Page 3'),
+                child: Text('Profile Page'),
               ),
             ],
           ),
@@ -50,29 +53,3 @@ class _UserState extends State<User> {
   }
 }
 
-class Page1 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Page 1'),
-    );
-  }
-}
-
-class Page2 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Page 2'),
-    );
-  }
-}
-
-class Page3 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Page 3'),
-    );
-  }
-}

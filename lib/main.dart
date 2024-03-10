@@ -4,14 +4,13 @@ import 'secure_share_state.dart';
 import 'shared_state.dart';
 import 'url/loginaction.dart';
 import 'user/user.dart';
-import 'util/show_snackbar.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
@@ -24,7 +23,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({super.key, required this.title});
 
   final String title;
 
@@ -73,24 +72,20 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () async {
                 var result = await logincall(emailController.text, passwordController.text);
-                if (result != null) {
-                  SharedState.setBearerToken(result.token);
-                  SecureSharedState.setUsername(emailController.text);
-                  SecureSharedState.setPassword(passwordController.text);
-                  emailController.text = '';
-                  passwordController.text = '';
+                SharedState.setBearerToken(result.token);
+                SecureSharedState.setUsername(emailController.text);
+                SecureSharedState.setPassword(passwordController.text);
+                emailController.text = '';
+                passwordController.text = '';
 
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const User()));
-                } else {
-                  showSnackbar(context, 'Brugernavn eller adgangskode er forkert.');
-                }
-              },
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const User()));
+                            },
               child: const Text('Login'),
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () async {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterPage()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const RegisterPage()));
               },
               child: const Text('Register'),
             )

@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'secure_share_state.dart';
+import 'shared_state.dart';
+import 'url/registercompanyAction.dart';
+import 'url/registeruseraction.dart';
+import 'user/user.dart';
 
 class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
@@ -33,25 +40,25 @@ class _RegisterPageState extends State<RegisterPage> {
       children: [
         TextField(
           controller: nameController,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Name',
           ),
         ),
         TextField(
           controller: emailController,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Email',
           ),
         ),
         TextField(
           controller: passwordController,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Password',
           ),
         ),
         TextField(
           controller: bioController,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Bio',
           ),
         ),
@@ -63,56 +70,62 @@ class _RegisterPageState extends State<RegisterPage> {
     return Column(
       children: [
         TextField(
-          controller: companyNameController,
-          decoration: InputDecoration(
+          controller: nameController,
+          decoration: const InputDecoration(
             labelText: 'Company Name',
           ),
         ),
         TextField(
-          controller: companyEmailController,
-          decoration: InputDecoration(
+          controller: emailController,
+          decoration: const InputDecoration(
             labelText: 'Company Email',
           ),
         ),
         TextField(
-          controller: companyPasswordController,
-          decoration: InputDecoration(
+          controller: passwordController,
+          decoration: const InputDecoration(
             labelText: 'Company Password',
           ),
         ),
         TextField(
+          controller: companyNameController,
+          decoration: const InputDecoration(
+            labelText: 'Company Name',
+          ),
+        ),
+        TextField(
           controller: companyDescriptionController,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Company Description',
           ),
         ),
         TextField(
           controller: companyVatController,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Company VAT',
           ),
         ),
         TextField(
           controller: companyCountryController,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Company Country',
           ),
         ),
         TextField(
           controller: companyCityController,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Company City',
           ),
         ),
         TextField(
           controller: companyAddressController,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Company Address',
           ),
         ),
         TextField(
           controller: companyZipcodeController,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Company Zipcode',
           ),
         ),
@@ -124,36 +137,53 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Register'),
+        title: const Text('Register'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             ElevatedButton(
               onPressed: switchForm,
               child: Text(isUser ? 'Switch to Company' : 'Switch to User'),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             isUser ? buildUserForm() : buildCompanyForm(),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             ElevatedButton(
-              onPressed: () {
-                print(nameController.text);
-                print(emailController.text);
-                print(passwordController.text);
-                print(bioController.text);
-                print(companyNameController.text);
-                print(companyEmailController.text);
-                print(companyPasswordController.text);
-                print(companyDescriptionController.text);
-                print(companyVatController.text);
-                print(companyCountryController.text);
-                print(companyCityController.text);
-                print(companyAddressController.text);
-                print(companyZipcodeController.text);
+              onPressed: () async {
+                if (isUser) {
+                  var result = await registeruserCall(
+                      nameController.text,
+                      emailController.text,
+                      passwordController.text,
+                      bioController.text);
+                  SharedState.setBearerToken(result.token);
+                  SecureSharedState.setUsername(emailController.text);
+                  SecureSharedState.setPassword(passwordController.text);
+
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const User()));
+                } else {
+                  var result = await RegistercompanyCall(
+                      nameController.text,
+                      emailController.text,
+                      passwordController.text,
+                      companyNameController.text,
+                      companyDescriptionController.text,
+                      companyVatController.text,
+                      companyCountryController.text,
+                      companyCityController.text,
+                      companyAddressController.text,
+                      companyZipcodeController.text);
+                  SharedState.setBearerToken(result.token);
+                  SecureSharedState.setUsername(emailController.text);
+                  SecureSharedState.setPassword(passwordController.text);
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const User()));
+                }
               },
-              child: Text('Register'),
+              child: const Text('Register'),
             )
           ],
         ),

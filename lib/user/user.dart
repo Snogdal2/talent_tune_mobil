@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'dashboard.dart';
 import 'joblisting.dart';
 import 'profile.dart';

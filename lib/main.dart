@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:talent_tune_mobil/company/company.dart';
 import 'register.dart';
 import 'secure_share_state.dart';
 import 'shared_state.dart';
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Talent Tune'),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -58,34 +59,46 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TextFormField(
-              style: const TextStyle(color: Colors.black),
-              controller: emailController,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                style: const TextStyle(color: Colors.black),
+                controller: emailController,
+              ),
             ),
             const SizedBox(height: 16.0),
-            TextFormField(
-              style: const TextStyle(color: Colors.black),
-              obscureText: true,
-              controller: passwordController,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                style: const TextStyle(color: Colors.black),
+                obscureText: true,
+                controller: passwordController,
+              ),
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () async {
-                var result = await logincall(emailController.text, passwordController.text);
-                SharedState.setBearerToken(result.token);
-                SecureSharedState.setUsername(emailController.text);
-                SecureSharedState.setPassword(passwordController.text);
-                emailController.text = '';
-                passwordController.text = '';
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const company()));
 
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const User()));
-                            },
+                // var result = await logincall(emailController.text, passwordController.text);
+                // SharedState.setBearerToken(result.token);
+                // SecureSharedState.setUsername(emailController.text);
+                // SecureSharedState.setPassword(passwordController.text);
+                // emailController.text = '';
+                // passwordController.text = '';
+                //
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => const User()));
+              },
               child: const Text('Login'),
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () async {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const RegisterPage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const RegisterPage()));
               },
               child: const Text('Register'),
             )

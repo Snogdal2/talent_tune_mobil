@@ -159,7 +159,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       passwordController.text,
                       bioController.text);
                   SharedState.setBearerToken(result.token);
-                  SecureSharedState.setUsername(emailController.text);
+                  SecureSharedState.setEmail(emailController.text);
                   SecureSharedState.setPassword(passwordController.text);
 
                   Navigator.push(context,
@@ -177,7 +177,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       companyAddressController.text,
                       companyZipcodeController.text);
                   SharedState.setBearerToken(result.token);
-                  SecureSharedState.setUsername(emailController.text);
+                  SecureSharedState.setEmail(emailController.text);
                   SecureSharedState.setPassword(passwordController.text);
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => const User()));

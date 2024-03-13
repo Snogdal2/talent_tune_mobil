@@ -31,7 +31,7 @@ class _ChatPageState extends State<ChatPage> {
               padding: const EdgeInsets.all(8.0),
               child: TextField(
                 controller: _cvController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Insert your CV...',
                 ),
               ),
@@ -55,7 +55,7 @@ class _ChatPageState extends State<ChatPage> {
             const SizedBox(height: 8),
             ListView.builder(
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: _messages.length,
               itemBuilder: (context, index) {
                 return ListTile(

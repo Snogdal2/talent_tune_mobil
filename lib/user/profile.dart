@@ -38,7 +38,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       return ListTile(
                         title: Text(file),
                         trailing: IconButton(
-                          icon: Icon(Icons.delete),
+                          icon: const Icon(Icons.delete),
                           onPressed: () {
                             setState(() {
                               files.removeAt(index);
@@ -55,7 +55,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         builder: (context) {
                           String newFile = '';
                           return AlertDialog(
-                            title: Text('Add File'),
+                            title: const Text('Add File'),
                             content: TextField(
                               onChanged: (value) {
                                 newFile = value;
@@ -69,14 +69,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                   });
                                   Navigator.pop(context);
                                 },
-                                child: Text('Add'),
+                                child: const Text('Add'),
                               ),
                             ],
                           );
                         },
                       );
                     },
-                    child: Text('Add File'),
+                    child: const Text('Add File'),
                   ),
                   
 
@@ -124,6 +124,12 @@ class _ProfilePageState extends State<ProfilePage> {
                       fontSize: 16,
                       color: Colors.grey,
                     ),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                    },
+                    child: const Text('change my info'),
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(

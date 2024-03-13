@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:talent_tune_mobil/company/company.dart';
 import 'register.dart';
 import 'secure_share_state.dart';
@@ -37,11 +38,20 @@ class _MyHomePageState extends State<MyHomePage> {
   var passwordController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  loadData() async {
+    final userInfo = await SecureSharedState.readAll();
+    emailController.text = userInfo['email'] ?? '';
+    passwordController.text = userInfo['password'] ?? '';
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // if (userInfo != null) {
-    // emailController.text = userInfo['username'] ?? '';
-    // passwordController.text = userInfo['password'] ?? '';
-    // }
     return Scaffold(
       appBar: AppBar(
         // TRY THIS: Try changing the color here to a specific color (to
@@ -78,17 +88,22 @@ class _MyHomePageState extends State<MyHomePage> {
             const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () async {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const company()));
-
-                // var result = await logincall(emailController.text, passwordController.text);
-                // SharedState.setBearerToken(result.token);
-                // SecureSharedState.setUsername(emailController.text);
-                // SecureSharedState.setPassword(passwordController.text);
-                // emailController.text = '';
-                // passwordController.text = '';
-                //
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => const User()));
+                var result = await logincall(
+                    emailController.text, passwordController.text);
+                Map<String, dynamic> decodedToken =
+                    JwtDecoder.decode(result.token);
+                SharedState.setBearerToken(result.token);
+                SecureSharedState.setEmail(emailController.text);
+                SecureSharedState.setPassword(passwordController.text);
+                emailController.text = '';
+                passwordController.text = '';
+                if (decodedToken.containsKey('company')) {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const company()));
+                } else {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const User()));
+                }
               },
               child: const Text('Login'),
             ),

@@ -1,4 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import '../secure_share_state.dart';
+import '../shared_state.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -8,6 +12,45 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
+  Map<String, dynamic> _data = {};
+  String email = '';
+
+  @override
+  void initState() {
+    super.initState();
+    GetUserProfile();
+    loadData();
+  }
+
+  loadData() async {
+    final userInfo = await SecureSharedState.readAll();
+    email = userInfo['email'] ?? '';
+    setState(() {});
+  }
+  Future<String> GetUserProfile() async {
+    final token = SharedState.bearerToken();
+    final profileResponse = await http.get(
+      Uri.parse('http://localhost:3001/profile'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+    );
+    if (profileResponse.statusCode == 200) {
+      // If the profile request was successful,
+      // then parse the profile JSON.
+      setState(() {
+        _data = jsonDecode(profileResponse.body) as Map<String, dynamic>;
+      });
+      print(_data);
+      return "true";
+    } else {
+      // If the profile request failed,
+      // then throw an exception.
+      throw Exception('Failed to get user profile.');
+    }
+  }
   bool showFiles = false;
 
   List<String> files = ["file1", "file2", "file3"];
@@ -94,16 +137,17 @@ class _ProfilePageState extends State<ProfilePage> {
             else
               Column(
                 children: [
-                  const Text(
-                    'Name: John Doe',
-                    style: TextStyle(
+                  _data.isEmpty ? const CircularProgressIndicator() :
+                   Text(
+                    'Name: ' + _data['firstName'] + ' ' + _data['lastName'],
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'Email: Johndoe@mail.com',
+                   Text(
+                    'Email: ' + email,
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -118,9 +162,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'Bio: Software Developer',
-                    style: TextStyle(
+                  _data.isEmpty ? const CircularProgressIndicator() :
+                   Text(
+                    'Bio: ' + _data['bio'],
+                    style: const TextStyle(
                       fontSize: 16,
                       color: Colors.grey,
                     ),
@@ -128,6 +173,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
+                      print(_data);
                     },
                     child: const Text('change my info'),
                   ),

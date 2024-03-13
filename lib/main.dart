@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:talent_tune_mobil/company/company.dart';
 import 'register.dart';
 import 'secure_share_state.dart';
 import 'shared_state.dart';
 import 'url/loginaction.dart';
+import 'user/test.dart';
 import 'user/user.dart';
 
 void main() {
@@ -99,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 passwordController.text = '';
                 if (decodedToken.containsKey('company')) {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const company()));
+                      MaterialPageRoute(builder: (context) => DataPage()));
                 } else {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => const User()));

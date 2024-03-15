@@ -99,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 passwordController.text = '';
                 if (decodedToken.containsKey('company')) {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => DataPage()));
+                      MaterialPageRoute(builder: (context) => const DataPage()));
                 } else {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => const User()));

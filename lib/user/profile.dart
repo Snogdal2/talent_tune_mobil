@@ -5,7 +5,7 @@ import '../secure_share_state.dart';
 import '../shared_state.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({super.key});
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -139,7 +139,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   _data.isEmpty ? const CircularProgressIndicator() :
                    Text(
-                    'Name: ' + _data['firstName'] + ' ' + _data['lastName'],
+                    '${'Name: ' + _data['firstName']} ' + _data['lastName'],
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -147,8 +147,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   const SizedBox(height: 8),
                    Text(
-                    'Email: ' + email,
-                    style: TextStyle(
+                    'Email: $email',
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),

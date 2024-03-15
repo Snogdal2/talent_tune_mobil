@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class DataPage extends StatefulWidget {
+  const DataPage({super.key});
+
   @override
   _DataPageState createState() => _DataPageState();
 }
@@ -39,10 +41,10 @@ class _DataPageState extends State<DataPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Data Page'),
+        title: const Text('Data Page'),
       ),
       body: Center(
-        child: _data.isEmpty ? CircularProgressIndicator() : Text(_data),
+        child: _data.isEmpty ? const CircularProgressIndicator() : Text(_data),
       ),
     );
   }

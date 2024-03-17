@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'applicants.dart';
 import 'dashboard.dart';
 import 'profile.dart';
@@ -51,4 +52,3 @@ class _UserState extends State<company> {
     );
   }
 }
-

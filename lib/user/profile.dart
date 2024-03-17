@@ -1,6 +1,8 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
 import '../secure_share_state.dart';
 import '../shared_state.dart';
 
@@ -12,7 +14,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-
   Map<String, dynamic> _data = {};
   String email = '';
 
@@ -28,6 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
     email = userInfo['email'] ?? '';
     setState(() {});
   }
+
   Future<String> GetUserProfile() async {
     final token = SharedState.bearerToken();
     final profileResponse = await http.get(
@@ -51,6 +53,7 @@ class _ProfilePageState extends State<ProfilePage> {
       throw Exception('Failed to get user profile.');
     }
   }
+
   bool showFiles = false;
 
   List<String> files = ["file1", "file2", "file3"];
@@ -121,10 +124,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     },
                     child: const Text('Add File'),
                   ),
-                  
-
                   const SizedBox(height: 16),
-                   ElevatedButton(
+                  ElevatedButton(
                     onPressed: () {
                       setState(() {
                         showFiles = false;
@@ -137,16 +138,18 @@ class _ProfilePageState extends State<ProfilePage> {
             else
               Column(
                 children: [
-                  _data.isEmpty ? const CircularProgressIndicator() :
-                   Text(
-                    '${'Name: ' + _data['firstName']} ' + _data['lastName'],
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  _data.isEmpty
+                      ? const CircularProgressIndicator()
+                      : Text(
+                          '${'Name: ' + _data['firstName']} ' +
+                              _data['lastName'],
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                   const SizedBox(height: 8),
-                   Text(
+                  Text(
                     'Email: $email',
                     style: const TextStyle(
                       fontSize: 20,
@@ -162,14 +165,15 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  _data.isEmpty ? const CircularProgressIndicator() :
-                   Text(
-                    'Bio: ' + _data['bio'],
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey,
-                    ),
-                  ),
+                  _data.isEmpty
+                      ? const CircularProgressIndicator()
+                      : Text(
+                          'Bio: ' + _data['bio'],
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey,
+                          ),
+                        ),
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {

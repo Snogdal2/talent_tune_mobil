@@ -1,5 +1,6 @@
-import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:http/http.dart' as http;
 import 'package:talent_tune_mobil/model/login_model.dart';
 
 import '../shared_state.dart';

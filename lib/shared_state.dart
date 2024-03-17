@@ -1,5 +1,4 @@
 class SharedState {
-
   // should only be mutated in pages/login.dart
   static String? _bearerToken;
 

@@ -5,12 +5,7 @@ class logininfo {
 
   factory logininfo.fromJson(Map<String, dynamic> json) {
     return switch (json) {
-      {
-      'token': String token
-      } =>
-          logininfo(
-            token: token
-          ),
+      {'token': String token} => logininfo(token: token),
       _ => throw const FormatException('Problem  with logininfo/token'),
     };
   }

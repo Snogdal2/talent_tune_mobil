@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+
 import 'register.dart';
 import 'secure_share_state.dart';
 import 'shared_state.dart';
@@ -98,8 +99,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 emailController.text = '';
                 passwordController.text = '';
                 if (decodedToken.containsKey('company')) {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const DataPage()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const DataPage()));
                 } else {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => const User()));

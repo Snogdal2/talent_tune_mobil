@@ -19,8 +19,8 @@ class _DataPageState extends State<DataPage> {
 
   Future<void> fetchData() async {
     try {
-      final response =
-          await http.get(Uri.parse('https://baconipsum.com/api/?type=meat-and-filler'));
+      final response = await http
+          .get(Uri.parse('https://baconipsum.com/api/?type=meat-and-filler'));
       if (response.statusCode == 200) {
         setState(() {
           _data = response.body;

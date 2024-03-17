@@ -34,9 +34,8 @@ class _ApplicantsPageState extends State<ApplicantsPage> {
             subtitle: Text(applicant.description),
             trailing: Wrap(
               spacing: 8.0,
-              children: applicant.tags
-                  .map((tag) => Chip(label: Text(tag)))
-                  .toList(),
+              children:
+                  applicant.tags.map((tag) => Chip(label: Text(tag))).toList(),
             ),
           );
         },

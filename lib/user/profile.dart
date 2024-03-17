@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 
 import '../secure_share_state.dart';
 import '../shared_state.dart';
+import 'package:file_picker/file_picker.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -44,8 +45,11 @@ class _ProfilePageState extends State<ProfilePage> {
       // then parse the profile JSON.
       setState(() {
         _data = jsonDecode(profileResponse.body) as Map<String, dynamic>;
+        var temp;
+        for(temp in _data['documents'] as List<dynamic>) {
+          files.add(temp['title']);
+        }
       });
-      print(_data);
       return "true";
     } else {
       // If the profile request failed,
@@ -56,7 +60,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   bool showFiles = false;
 
-  List<String> files = ["file1", "file2", "file3"];
+  List<String> files = [];
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +89,23 @@ class _ProfilePageState extends State<ProfilePage> {
                         title: Text(file),
                         trailing: IconButton(
                           icon: const Icon(Icons.delete),
-                          onPressed: () {
+                          onPressed: () async {
+                            final token = SharedState.bearerToken();
+                            final deleteResponse = await http.delete(
+                              Uri.parse('http://localhost:3001/profile/documents/${_data['documents'][index]['_id']}'), // Replace 'http://localhost:3001/files' with your API endpoint
+                              headers: <String, String>{
+                                'Content-Type': 'application/json; charset=UTF-8',
+                                'Authorization': 'Bearer $token',
+                              },
+                            );
+
+                            if (deleteResponse.statusCode == 200) {
+                              // File deletion successful
+                              print('File deleted successfully');
+                            } else {
+                              // File deletion failed
+                              throw Exception('Failed to delete file.');
+                            }
                             setState(() {
                               files.removeAt(index);
                             });
@@ -95,32 +115,39 @@ class _ProfilePageState extends State<ProfilePage> {
                     },
                   ),
                   ElevatedButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          String newFile = '';
-                          return AlertDialog(
-                            title: const Text('Add File'),
-                            content: TextField(
-                              onChanged: (value) {
-                                newFile = value;
-                              },
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  setState(() {
-                                    files.add(newFile);
-                                  });
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('Add'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
+                    onPressed: () async {
+                      FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+                      if (result != null) {
+                        PlatformFile file = result.files.first;
+
+                        // Perform the file upload logic here
+                        // You can use the 'http' package or any other package of your choice
+
+                        // Example code to upload the file using 'http' package
+              
+
+                        final token = SharedState.bearerToken();
+                        var request = http.MultipartRequest(
+                          'POST',
+                          Uri.parse('http://localhost:3001/profile/documents'),
+                        );
+
+                        request.headers['Authorization'] = 'Bearer $token';
+                        request.fields['title'] = file.name;
+                        request.fields['encoded'] = base64Encode(file.bytes!);
+
+                        var response = await request.send();
+                        if (response.statusCode == 200) {
+                          // File uploaded successfully
+                          setState(() {
+                            files.add(file.name);
+                          });
+                        } else {
+                          // File upload failed
+                          print('Failed to upload file');
+                        }
+                      }
                     },
                     child: const Text('Add File'),
                   ),

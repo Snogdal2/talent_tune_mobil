@@ -36,9 +36,11 @@ class _JobListingPageState extends State<JobListingPage> {
     if (joblistingResponse.statusCode == 200) {
       var temp = jsonDecode(joblistingResponse.body) as Map<String, dynamic>;
       temp2 = temp['data'][0]['jobListings'] as List<dynamic>;
-      for(temp in temp2) {
-        joblist.add( JobListing(title: temp['title'], company: temp['company'], tags: temp['tags'][0]
-        ));
+      for (temp in temp2) {
+        joblist.add(JobListing(
+            title: temp['title'],
+            company: temp['company'],
+            tags: temp['tags'][0]));
       }
       setState(() {});
       return "true";
@@ -113,4 +115,3 @@ class JobListing {
     required this.tags,
   });
 }
-

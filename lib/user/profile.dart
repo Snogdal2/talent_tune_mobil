@@ -1,11 +1,11 @@
 import 'dart:convert';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../secure_share_state.dart';
 import '../shared_state.dart';
-import 'package:file_picker/file_picker.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -46,7 +46,7 @@ class _ProfilePageState extends State<ProfilePage> {
       setState(() {
         _data = jsonDecode(profileResponse.body) as Map<String, dynamic>;
         var temp;
-        for(temp in _data['documents'] as List<dynamic>) {
+        for (temp in _data['documents'] as List<dynamic>) {
           files.add(temp['title']);
         }
       });
@@ -92,9 +92,12 @@ class _ProfilePageState extends State<ProfilePage> {
                           onPressed: () async {
                             final token = SharedState.bearerToken();
                             final deleteResponse = await http.delete(
-                              Uri.parse('http://localhost:3001/profile/documents/${_data['documents'][index]['_id']}'), // Replace 'http://localhost:3001/files' with your API endpoint
+                              Uri.parse(
+                                  'http://localhost:3001/profile/documents/${_data['documents'][index]['_id']}'),
+                              // Replace 'http://localhost:3001/files' with your API endpoint
                               headers: <String, String>{
-                                'Content-Type': 'application/json; charset=UTF-8',
+                                'Content-Type':
+                                    'application/json; charset=UTF-8',
                                 'Authorization': 'Bearer $token',
                               },
                             );
@@ -116,7 +119,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   ElevatedButton(
                     onPressed: () async {
-                      FilePickerResult? result = await FilePicker.platform.pickFiles();
+                      FilePickerResult? result =
+                          await FilePicker.platform.pickFiles();
 
                       if (result != null) {
                         PlatformFile file = result.files.first;
@@ -125,7 +129,6 @@ class _ProfilePageState extends State<ProfilePage> {
                         // You can use the 'http' package or any other package of your choice
 
                         // Example code to upload the file using 'http' package
-              
 
                         final token = SharedState.bearerToken();
                         var request = http.MultipartRequest(

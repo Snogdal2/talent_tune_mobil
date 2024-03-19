@@ -5,7 +5,6 @@ import 'register.dart';
 import 'secure_share_state.dart';
 import 'shared_state.dart';
 import 'url/loginaction.dart';
-import 'user/test.dart';
 import 'user/user.dart';
 
 void main() {
@@ -99,10 +98,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 emailController.text = '';
                 passwordController.text = '';
                 if (decodedToken.containsKey('company')) {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const DataPage()));
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => const DataPage()));
                 } else {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => const User()));

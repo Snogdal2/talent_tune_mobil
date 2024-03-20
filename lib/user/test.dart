@@ -1,51 +1,43 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 
-class DataPage extends StatefulWidget {
-  const DataPage({super.key});
+import '../shared_state.dart';
 
-  @override
-  _DataPageState createState() => _DataPageState();
+void fetchData() async {
+  final token = SharedState.bearerToken();
+  final response =
+      await http.post(Uri.parse('http://localhost:3001/assistant/initialize'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer $token',
+          },
+          body: jsonEncode(<String, String>{
+            'resume': 'my name is james and hard working',
+            'jobDescription':
+                'it support. hard working and good communication skills'
+          }));
+
+  if (response.statusCode == 200) {
+    print(response.body);
+    const totalChunks = 10; // Total number of chunks to receive
+    final chunkSize = response.body.length ~/ totalChunks;
+
+    for (var i = 0; i < totalChunks; i++) {
+      final start = i * chunkSize;
+      final end = (i + 1) * chunkSize;
+
+      final chunk = response.body.substring(start, end);
+      displayChunk(chunk);
+
+      await Future.delayed(const Duration(seconds: 1)); // Delay between chunks
+    }
+  } else {
+    print('Failed to fetch data. Error: ${response.statusCode}');
+  }
 }
 
-class _DataPageState extends State<DataPage> {
-  String _data = '';
-
-  @override
-  void initState() {
-    super.initState();
-    fetchData();
-  }
-
-  Future<void> fetchData() async {
-    try {
-      final response = await http
-          .get(Uri.parse('https://baconipsum.com/api/?type=meat-and-filler'));
-      if (response.statusCode == 200) {
-        setState(() {
-          _data = response.body;
-        });
-      } else {
-        setState(() {
-          _data = 'Error: ${response.statusCode}';
-        });
-      }
-    } catch (e) {
-      setState(() {
-        _data = 'Error: $e';
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Data Page'),
-      ),
-      body: Center(
-        child: _data.isEmpty ? const CircularProgressIndicator() : Text(_data),
-      ),
-    );
-  }
+void displayChunk(String chunk) {
+  // Display the chunk live as it arrives
+  print('Received chunk: $chunk');
 }

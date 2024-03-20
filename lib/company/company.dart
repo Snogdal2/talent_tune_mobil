@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'applicants.dart';
 import 'dashboard.dart';
+import 'candidate.dart';
 import 'profile.dart';
 
 class company extends StatefulWidget {
@@ -15,8 +15,8 @@ class _UserState extends State<company> {
   int _currentPageIndex = 0;
 
   final List<Widget> _pages = [
-    const CandidatePage(),
     const ApplicantsPage(),
+    const CandidatePage(),
     const CompanyInfoPage(),
   ];
 
@@ -34,11 +34,11 @@ class _UserState extends State<company> {
             itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
               const PopupMenuItem<int>(
                 value: 0,
-                child: Text('Candidates page'),
+                child: Text('Job Listing Page'),
               ),
               const PopupMenuItem<int>(
                 value: 1,
-                child: Text('Job Listing Page'),
+                child: Text('Candidates page'),
               ),
               const PopupMenuItem<int>(
                 value: 2,
